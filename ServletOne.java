@@ -1,44 +1,39 @@
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/ServletOne")
+
 public class ServletOne extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    PrintWriter out;
 
-    public ServletOne() {
-        super();
-    }
+    DatabaseDAO db = new DatabaseDAO();
+    Connection conn = db.connToDataBase("postgres", "postgres", "1223334444");
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from get method");
+        db.readData(conn, "students");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from post method");
+        db.insertRow(conn, "students", 5, "Joseph Joestar", "PE");
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from put method");
+        db.updateName(conn, "students", "Roach Woman", "Spider Man");
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from delete method");
+        db.deleteRow(conn, "students", "Joseph Joestar");
     }
 
 }
