@@ -1,9 +1,12 @@
-public interface IRepository<T extends Student> {
-    
-    public T get(int ID);
+import java.sql.SQLException;
+import java.util.Collection;
 
-    public boolean add(T entity);
-    public boolean update(T entity);
-    public boolean delete(T entity);
+public interface IRepository<T extends Student> {
+
+    public T get(int ID) throws SQLException;
+    public Collection<T> getAll() throws SQLException;
+    public T add(T entity) throws SQLException;
+    public T update(T entity) throws SQLException;
+    public String delete(T entity) throws SQLException;
 
 }

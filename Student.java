@@ -1,17 +1,26 @@
 
-public class Student implements Comparable<Object> {
+public class Student {
 
     private int id;
-    private String name = "";
-    private String course = "";
+    private String firstName = "";
+    private String middleName = "";
+    private String lastName = "";
 
     public Student() {
 
     }
 
-    public Student(String name, String course) {
-        this.name = name;
-        this.course = course;
+    public Student(String firstName, String middleName, String lastName) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
+
+    public Student(int id, String firstName, String middleName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
     }
 
     public int getId() {
@@ -23,33 +32,31 @@ public class Student implements Comparable<Object> {
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getCourse() {
-        return course;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setCourse(String course) {
-        this.course = course;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Student that = (Student) o;
-        int compareValue;
-        if (this.id > that.id) {
-            compareValue = 1;
-        } else if (this.id < that.id) {
-            compareValue = -1;
-        } else {
-            compareValue = 0;
-        }
-        return compareValue;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String toString() {
+        return "ID: " + id + " Name: " + firstName + " " + middleName + " " + lastName;
     }
 }

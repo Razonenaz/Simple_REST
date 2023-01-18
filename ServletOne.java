@@ -1,10 +1,5 @@
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.json.JSONObject;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,83 +13,31 @@ public class ServletOne extends HttpServlet {
     StudentService service = new StudentService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String JSON_DATA = getBody(request);
-            final JSONObject obj = new JSONObject(JSON_DATA);
-            int std_id = obj.getInt("std_id");
-            service.getStudent(std_id);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            service.getStudent(id);
+        } else {
+            service.getAllStudents();
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String JSON_DATA = getBody(request);
-            final JSONObject obj = new JSONObject(JSON_DATA);
-            String std_name = obj.getString("std_name");
-            String std_course = obj.getString("std_course");
-            service.addStudent(std_name, std_course);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String jsonData = StudentController.getBody(request);
+        Student student = StudentController.fromJson(jsonData);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        service.addStudent(student);
     }
 
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String JSON_DATA = getBody(request);
-            final JSONObject obj = new JSONObject(JSON_DATA);
-            int std_id = obj.getInt("std_id");
-            String std_name = obj.getString("std_name");
-            String std_course = obj.getString("std_course");
-            service.updateStudent(std_id, std_name, std_course);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String jsonData = StudentController.getBody(request);
+        Student student = StudentController.fromJson(jsonData);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        service.updateStudent(id, student);
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String JSON_DATA = getBody(request);
-            final JSONObject obj = new JSONObject(JSON_DATA);
-            int std_id = obj.getInt("std_id");
-            service.deleteStudent(std_id);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String getBody(HttpServletRequest request) throws Exception {
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw new Exception(ex.getMessage());
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                }
-            }
-        }
-        body = stringBuilder.toString();
-        return body;
+        int id = Integer.parseInt(request.getParameter("id"));
+        service.deleteStudent(id);
     }
 }

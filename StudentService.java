@@ -1,42 +1,51 @@
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class StudentService {
 
-    StudentRepository sr = new StudentRepository("students");
+    private StudentRepository sr = new StudentRepository("students");
 
-    public void getStudent(int std_id) {
+    public void getStudent(int id) {
         try {
-            Student student = sr.get(std_id);
-            String fullInfo = String.format("%s %s %s", student.getId(), student.getName(), student.getCourse());
-            DBConnection.loggerDB.info(fullInfo);
-        } catch (Exception e) {
+            Student student = sr.get(id);
+            DBConnection.loggerDB.info(student.toString());
+        } catch (SQLException e) {
             DBConnection.loggerDB.error(e);
         }
     }
 
-    public void addStudent(String std_name, String std_course) {
+    public void getAllStudents() {
         try {
-            Student student = new Student(std_name, std_course);
+            ArrayList<Student> list = sr.getAll();
+            for (Student student : list) {
+                DBConnection.loggerDB.info(student.toString());
+            }
+        } catch (SQLException e) {
+            DBConnection.loggerDB.error(e);
+        }
+    }
+
+    public void addStudent(Student student) {
+        try {
             sr.add(student);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             DBConnection.loggerDB.error(e);
         }
     }
 
-    public void updateStudent(int std_id, String std_name, String std_course) {
+    public void updateStudent(int id, Student student) {
         try {
-            Student student = new Student(std_name, std_course);
-            student.setId(std_id);
+            student.setId(id);
             sr.update(student);
-            DBConnection.loggerDB.info("Row has been updated");
         } catch (Exception e) {
             DBConnection.loggerDB.info(e);
         }
     }
-    public void deleteStudent(int std_id) {
+    public void deleteStudent(int id) {
         try {
-            Student student = sr.get(std_id);
-            sr.delete(student);
-            DBConnection.loggerDB.info("Row has been deleted");
-        } catch (Exception e) {
+            Student student = sr.get(id);
+            DBConnection.loggerDB.info(sr.delete(student));
+        } catch (SQLException e) {
             DBConnection.loggerDB.error(e);
         }
     }
