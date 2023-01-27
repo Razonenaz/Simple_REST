@@ -1,44 +1,43 @@
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/ServletOne")
+
 public class ServletOne extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    PrintWriter out;
+    StudentService service = new StudentService();
 
-    public ServletOne() {
-        super();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            service.getStudent(id);
+        } else {
+            service.getAllStudents();
+        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from get method");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String jsonData = StudentController.getBody(request);
+        Student student = StudentController.fromJson(jsonData);
+
+        service.addStudent(student);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from post method");
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String jsonData = StudentController.getBody(request);
+        Student student = StudentController.fromJson(jsonData);
+
+        service.updateStudent(id, student);
     }
 
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from put method");
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        service.deleteStudent(id);
     }
-
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        out = response.getWriter();
-        out.print("response from delete method");
-    }
-
 }
