@@ -10,37 +10,40 @@ import com.springboot.rest.repository.IRepository;
 
 @Service
 public class StudentService {
-    
+
     @Autowired
     private IRepository repository;
-    
-    public void showAllStudents() {
-        List<Student> list = repository.findAll();
-        
-        for(Student student : list) {
-            System.out.println(student);
-        }
+
+    public List<Student> getAll() {
+        List<Student> students = repository.findAll();
+
+        return students;
     }
-    
-    public void showStudentById(long id) {
-        Student student = repository.findById(id).get();
-        System.out.println(student);
+
+    public Student getById(long id) {
+        Student student = repository.findById(id)
+            .get();
+
+        return student;
     }
-    
-    
-    public void insertStudent(Student student) {
-        repository.save(student);
-        System.out.println("Has been inserted: " + student);
+
+    public Student add(Student student) {
+        Student studentCreated = repository.save(student);
+
+        return studentCreated;
     }
-    
-    public void updateStudentById(Student student, long id) {
+
+    public Student updateById(Student student, long id) {
         student.setId(id);
         repository.save(student);
-        System.out.println("Has been updated: " + student);
+
+        return repository.findById(id)
+            .get();
     }
-    
-    public void deleteStudentById(long id) {
+
+    public String deleteById(long id) {
         repository.deleteById(id);
-        System.out.println("Deleted!");
+
+        return "Deleted!";
     }
 }

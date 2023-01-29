@@ -6,57 +6,37 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Builder
 @Table(name = "students")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "std_id")
-    long id;
+    @Getter
+    @Setter
+    private long id;
 
     @Column(name = "first_name")
-    String firstName;
+    private String firstName;
 
     @Column(name = "middle_name")
-    String middleName;
+    private String middleName;
 
     @Column(name = "last_name")
-    String lastName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id2) {
-        this.id = id2;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
+    private String lastName;
+    
     @Override
     public String toString() {
         return "Student{ id: " + id + " Full name: " + firstName + " " + middleName + " " + lastName + " }";
